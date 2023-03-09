@@ -1,21 +1,23 @@
-# Specify the base image
-FROM node:14.17-alpine
+# Use an official Node.js runtime as a parent image
+FROM node:14-alpine
 
-# Create a working directory
+# Set the working directory to /app
 WORKDIR /app
 
-# Clone the GitHub repository
-RUN apk --no-cache add git && \
-    git clone https://github.com/Hussain147/experiment2.git .
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Build the React application
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Build the React app
 RUN npm run build
 
-# Expose port 3000
+# Expose port 3000 for the app to run on
 EXPOSE 3000
 
-# Start the React application
+# Start the app when the container launches
 CMD ["npm", "start"]
